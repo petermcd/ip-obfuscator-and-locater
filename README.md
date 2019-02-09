@@ -1,4 +1,4 @@
-#W hat is this package for
+# What is this package for
 
 This package is intended to obtain the country an
 IP address is located in as well as creating an
