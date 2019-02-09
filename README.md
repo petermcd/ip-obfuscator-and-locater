@@ -25,6 +25,13 @@ database_file = 'path/to/db'
 The api key can be obtained from ipstack after
 signing up for an account.
 
+If you do not already have the Requests package
+installed you will also need to install this such as
+
+```python
+pip install requests
+```
+
 ## Usage
 
 After configuration has been completed simply call
