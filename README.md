@@ -1,4 +1,4 @@
-# What is this package for
+## What is this package for
 
 This package is intended to obtain the country an
 IP address is located in as well as creating an
@@ -21,3 +21,19 @@ api_base_url = "http://api.ipstack.com/"
 api_key = ""
 database_file = 'path/to/db'
 ```
+
+The api key can be obtained from ipstack after
+signing up for an account.
+
+## Usage
+
+After configuration has been completed simply call
+the script like:
+
+```python
+python ip.py
+```
+
+As is the script waits for 1/2 a second after each
+api request so that the API is not overloaded with
+requests.
