@@ -10,26 +10,30 @@ DynamoDB by [SSH-Login-Attempts-Logger](https://github.com/PeterMcD/SSH-Login-At
 
 ## Setting up the package
 
-The package relies on an API provided by ipstack.com
+The package relies on an API provided by [IP Stack](https://ipstack.com)
 who offer free accounts with a generous allowance.
 
-The package expects a config.py file with contents
+The package expects a config.ini file with contents
 similar to:
 
-```python
-api_base_url = "http://api.ipstack.com/"
-api_key = ""
-database_file = 'path/to/db'
+```code
+[api]
+url = http://api.ipstack.com/
+key = API_KEY
+[local]
+database_file = resources\test_db
 ```
 
-The api key can be obtained from ipstack after
+The api key can be obtained from IP Stack after
 signing up for an account.
 
-If you do not already have the Requests package
-installed you will also need to install this such as
+THis package makes use of the requirements file.
+Installing the requirements can be achieved from
+calling the following command in the same folder
+the requirements.txt file is in.
 
-```python
-pip install requests
+```code
+pip install -r requirements.txt
 ```
 
 ## Usage
@@ -37,10 +41,20 @@ pip install requests
 After configuration has been completed simply call
 the script like:
 
-```python
-python ip.py
+```code
+python IpToCountry.py
 ```
 
-As is the script waits for 1/2 a second after each
-api request so that the API is not overloaded with
-requests.
+If you simply wish to ascertain the country for an
+IP you can now add the following code:
+
+```python
+from IpToCountry import IpToCountry
+
+ip_checker = IpToCountry()
+print(ip_checker.get_ip_location('1.1.1.1'))
+```
+
+The above script would still require the ini file to be
+configured for the url and api key however will not
+attempt to write the results to a database.
