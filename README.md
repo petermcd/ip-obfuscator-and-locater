@@ -14,7 +14,7 @@ The package relies on an API provided by [IP Stack](https://ipstack.com)
 who offer free accounts with a generous allowance.
 
 The package expects a config.ini file with contents
-similar to:
+similar to the following:
 
 ```code
 [api]
@@ -49,12 +49,12 @@ If you simply wish to ascertain the country for an
 IP you can now add the following code:
 
 ```python
-from IpToCountry import IpToCountry
+from IpToCountry import ip_to_country
 
-ip_checker = IpToCountry()
+ip_checker = ip_to_country()
 print(ip_checker.get_ip_location('1.1.1.1'))
 ```
 
 The above script would still require the ini file to be
-configured for the url and api key however will not
+configured for the url and api key, however, will not
 attempt to write the results to a database.

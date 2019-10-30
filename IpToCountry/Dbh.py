@@ -19,7 +19,9 @@ class Dbh:
         :param country: Country the IP is associated with
         :return: None
         """
-        sql = 'UPDATE logins SET `country` = ?, `obfuscated_host` = ? WHERE `host` = ?'
+        sql = 'UPDATE logins '\
+              'SET `country` = ?, `obfuscated_host` = ?'\
+              ' WHERE `host` = ?'
         self._cursor.execute(sql, (country, self._unique_identifier, ip))
         self._unique_identifier += 1
         return None
