@@ -42,16 +42,16 @@ After configuration has been completed simply call
 the script like:
 
 ```code
-python IpToCountry.py
+python IpToCountry/ip_to_country.py
 ```
 
 If you simply wish to ascertain the country for an
 IP you can now add the following code:
 
 ```python
-from IpToCountry import ip_to_country
+from IpToCountry.ip_to_country import IpToCountry
 
-ip_checker = ip_to_country()
+ip_checker = IpToCountry()
 print(ip_checker.get_ip_location('1.1.1.1'))
 ```
 

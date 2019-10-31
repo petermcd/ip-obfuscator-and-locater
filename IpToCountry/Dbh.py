@@ -1,14 +1,25 @@
 import sqlite3
 
 
+class DbhException(Exception):
+    pass
+
+
 class Dbh:
+
+    _handler = None
+    _cursor = None
+    _unique_identifier = None
 
     def __init__(self, database):
         """
         Constructor
         :param database: Location of the database file to open.
         """
-        self._handler = sqlite3.connect(database=database)
+        try:
+            self._handler = sqlite3.connect(database=database)
+        except sqlite3.OperationalError:
+            raise DbhException('Configured database file cannot be opened')
         self._cursor = self._handler.cursor()
         self._unique_identifier = 0
 
@@ -42,6 +53,7 @@ class Dbh:
         Destructor
         :return: None
         """
-        self._handler.commit()
-        self._handler.close()
+        if self._handler is not None:
+            self._handler.commit()
+            self._handler.close()
         return None

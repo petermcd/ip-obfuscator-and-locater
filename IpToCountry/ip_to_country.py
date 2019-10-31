@@ -4,6 +4,11 @@ import json
 import configparser
 
 from IpToCountry.Dbh import Dbh
+from IpToCountry.Dbh import DbhException
+
+
+class IpToCountryException(Exception):
+    pass
 
 
 class IpToCountry:
@@ -29,7 +34,10 @@ class IpToCountry:
             database_file = self._config['local']['database_file']
         if database_file is None:
             raise ValueError('Database file url not supplied')
-        self._dbh = Dbh(database_file)
+        try:
+            self._dbh = Dbh(database_file)
+        except DbhException as ex:
+            raise IpToCountryException(str(ex))
         for ip in self._dbh.fetch_ips():
             country = self.get_ip_location(ip)
             self._dbh.update_ip(ip, country)
@@ -56,16 +64,16 @@ class IpToCountry:
             if the query returned an error
             '''
             if 'success' in response and not response['success']:
-                raise ValueError(response)
+                raise IpToCountryException(response)
             else:
                 return response['country_name']
         else:
-            raise ConnectionError()
+            raise IpToCountryException('Connection failed')
 
 
 if __name__ == '__main__':
     try:
         IpToCountry = IpToCountry()
         IpToCountry.get_ip_locations_from_database()
-    except ConnectionError or ValueError:
-        print('Request failed')
+    except IpToCountryException as ex:
+        print(str(ex))
