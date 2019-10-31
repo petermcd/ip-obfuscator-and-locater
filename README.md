@@ -27,13 +27,13 @@ database_file = resources\test_db
 The api key can be obtained from IP Stack after
 signing up for an account.
 
-This package makes use of the requirements file.
+This package makes use of the setup.py file.
 Installing the requirements can be achieved from
 calling the following command in the same folder
-the requirements.txt file is in.
+the setup.py file is in.
 
 ```code
-pip install -r requirements.txt
+pip install .
 ```
 
 ## Usage
