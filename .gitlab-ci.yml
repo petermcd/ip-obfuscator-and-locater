@@ -23,11 +23,12 @@ before_script:
   - pip install virtualenv
   - virtualenv venv
   - source venv/bin/activate
+  - pip install -e .[test]
 
 test:
   script:
-    - pip install tox
-    - tox
+    - python setup.py test
+    - flake8
 
 run:
   script:
