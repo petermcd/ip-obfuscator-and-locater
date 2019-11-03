@@ -6,6 +6,13 @@ short_description = "Simple tool to identify the Country an IP is registered" \
 with open("README.md") as readmeFile:
     readme = readmeFile.read()
 
+additional_requirements = [
+    "flake8",
+    "pytest",
+    "pytest-mock",
+    "pytest-cov",
+]
+
 setup(
     name="IP Obfuscator And Locator",
     version="0.1",
@@ -17,15 +24,16 @@ setup(
     download_url="https://github.com/petermcd/ip-obfuscator-and-locater",
     license="MIT",
     keywords="ip,geolocation",
+    setup_requires=(
+        "pytest-runner"
+    ),
     install_requires=[
         "requests",
         "config-parser",
     ],
-    tests_require=[
-        "tox",
-        "flake8",
-        "pytest",
-        "pytest-mock",
-    ],
-    packages=find_packages(),
+    tests_require=additional_requirements,
+    extras_require={"test": additional_requirements},
+    packages=find_packages(
+        where="IpToCountry"
+    ),
 )
