@@ -1,12 +1,12 @@
 from IpToCountry.ip_to_country import IpToCountry
 
 
-class Test_IpToCountry:
-    def testParser(self):
+class TestIpToCountry:
+    def test_ip_to_country_config_parser(self):
         ip_to_country = IpToCountry()
         assert \
             ip_to_country._config['api']['url'] ==\
-            'http://api.ipstack.com/'
+            'https://api.ipstack.com/'
         assert \
             ip_to_country._config['api']['key'] ==\
             'API_KEY'
