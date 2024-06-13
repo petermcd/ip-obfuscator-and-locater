@@ -1,55 +1,67 @@
-import requests
-import json
-
+"""Code to hande translation of IP addresses to countries."""
 import configparser
+import json
+from typing import Optional
 
-from IpToCountry.Dbh import Dbh
-from IpToCountry.Dbh import DbhException
+import requests
+
+from IpToCountry.database import Database, DatabaseException
 
 
 class IpToCountryException(Exception):
+    """Exception raised for errors in the IpToCountry class."""
+
     pass
 
 
-class IpToCountry:
+class IpToCountry(object):
+    """Class to handle translation of IP addresses to countries."""
 
     __slots__ = [
         '_config',
-        '_dbh',
+        '_handler',
     ]
 
     def __init__(self):
+        """Initialize the class."""
         self._config = configparser.ConfigParser()
         self._config.read('IpToCountry/config.ini')
-        self._dbh = None
+        self._handler = None
 
-    def get_ip_locations_from_database(self, database_file=None):
+    def get_ip_locations_from_database(self, database_file: Optional[str] = None) -> None:
         """
-        Iterates the database to ascertain the IP's country of origin.
-        :param database_file: URL of the sqlite database to be iterated
-        :raises ValueError: Raised when no database file supplied
-        :return: None
+        Iterate the database to ascertain the IP's country of origin.
+
+        Args:
+             database_file: URL of the sqlite database to be iterated
+        Raises:
+             ValueError: Raised when no database file supplied
         """
-        if database_file is None:
+        if not database_file:
             database_file = self._config['local']['database_file']
-        if database_file is None:
-            raise ValueError('Database file url not supplied')
+        if not database_file:
+            raise IpToCountryException('No database file supplied')
         try:
-            self._dbh = Dbh(database_file)
-        except DbhException as ex:
-            raise IpToCountryException(str(ex))
-        for ip in self._dbh.fetch_ips():
+            self._handler = Database(database_file)
+            if not self._handler:
+                raise DatabaseException('Database handler not initialised')
+        except DatabaseException as exc:
+            raise IpToCountryException(str(exc))
+        for ip in self._handler.fetch_ips():
             country = self.get_ip_location(ip)
-            self._dbh.update_ip(ip, country)
+            self._handler.update_ip(ip, country)
         return None
 
-    def get_ip_location(self, ip):
+    def get_ip_location(self, ip: str) -> str:
         """
-        Queries an individual IP to ascertain the country.
-        :param ip: IP to be queried.
-        :raises ValueError: Raised if an invalid response is received.
-        :raises ConnectionError: Raised if the API query failed..
-        :return: country_name: name of the country the IP is associated with.
+        Query an individual IP to ascertain the country.
+
+        Args:
+             ip: IP to be queried.
+        Raises:
+             ValueError: Raised if an invalid response is received.
+             ConnectionError: Raised if the API query failed.
+        Returns: country_name: name of the country the IP is associated with.
         """
         url = \
             self._config['api']['url']\
@@ -73,7 +85,7 @@ class IpToCountry:
 
 if __name__ == '__main__':
     try:
-        IpToCountry = IpToCountry()
-        IpToCountry.get_ip_locations_from_database()
+        ip_2_country = IpToCountry()
+        ip_2_country.get_ip_locations_from_database()
     except IpToCountryException as ex:
         print(str(ex))
