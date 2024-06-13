@@ -6,10 +6,8 @@ from typing import Generator
 class DatabaseException(Exception):
     """Exception class for database errors."""
 
-    pass
 
-
-class Database(object):
+class Database:
     """Class to handle database connections and queries."""
 
     __slots__ = ('_handler', '_cursor', '_unique_identifier')
@@ -23,8 +21,8 @@ class Database(object):
         """
         try:
             self._handler = sqlite3.connect(database=database_file)
-        except sqlite3.OperationalError:
-            raise DatabaseException('Configured database file cannot be opened')
+        except sqlite3.OperationalError as exc:
+            raise DatabaseException('Configured database file cannot be opened') from exc
         self._cursor = self._handler.cursor()
         self._unique_identifier = 0
 
@@ -38,14 +36,11 @@ class Database(object):
         """
         if not self._cursor:
             raise DatabaseException('Database cursor not initialised')
-        if not self._unique_identifier:
-            self._unique_identifier = 0
         sql = 'UPDATE logins '\
               'SET `country` = ?, `obfuscated_host` = ?'\
               ' WHERE `host` = ?'
         self._cursor.execute(sql, (country, self._unique_identifier, ip))
         self._unique_identifier += 1
-        return None
 
     def fetch_ips(self) -> Generator[str, str, str]:
         """

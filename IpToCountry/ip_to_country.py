@@ -1,4 +1,4 @@
-"""Code to hande translation of IP addresses to countries."""
+"""Code to handle translation of IP addresses to countries."""
 import configparser
 import json
 from typing import Optional
@@ -14,7 +14,7 @@ class IpToCountryException(Exception):
     pass
 
 
-class IpToCountry(object):
+class IpToCountry:
     """Class to handle translation of IP addresses to countries."""
 
     __slots__ = [
@@ -43,14 +43,11 @@ class IpToCountry(object):
             raise IpToCountryException('No database file supplied')
         try:
             self._handler = Database(database_file)
-            if not self._handler:
-                raise DatabaseException('Database handler not initialised')
         except DatabaseException as exc:
             raise IpToCountryException(str(exc))
         for ip in self._handler.fetch_ips():
             country = self.get_ip_location(ip)
             self._handler.update_ip(ip, country)
-        return None
 
     def get_ip_location(self, ip: str) -> str:
         """
@@ -85,7 +82,7 @@ class IpToCountry(object):
 
 if __name__ == '__main__':
     try:
-        ip_2_country = IpToCountry()
-        ip_2_country.get_ip_locations_from_database()
+        ip_to_country = IpToCountry()
+        ip_to_country.get_ip_locations_from_database()
     except IpToCountryException as ex:
         print(str(ex))
